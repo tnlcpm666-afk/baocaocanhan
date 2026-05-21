@@ -956,41 +956,16 @@ const PAGE_TITLES = {dashboard:'Tổng quan',tasks:'Quản lý công việc',cal
 function syncBannerHTML(){
   if(currentMode !== 'view') return '';
   const url = cfg().driveScriptUrl;
-
-  // Luôn hiện banner trong chế độ xem — có Drive thì sync, không có thì báo cần cấu hình
-  if(!url){
-    return `
-    <div style="background:linear-gradient(135deg,#E87722,#f59e42);border-radius:14px;
-      padding:14px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;
-      box-shadow:0 4px 16px rgba(232,119,34,.25)">
-      <div style="font-size:22px;flex-shrink:0">⚠️</div>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:2px">Chưa kết nối Google Drive</div>
-        <div style="font-size:12px;color:rgba(255,255,255,.9)">
-          Admin cần vào <strong>Cài đặt → Google Drive</strong> để cấu hình đồng bộ tự động
-        </div>
-      </div>
-    </div>`;
-  }
-
+  // Không có Drive URL → không hiện gì, sếp thấy data bình thường từ localStorage
+  if(!url) return '';
+  // Có Drive URL → hiện nút đồng bộ
   return `
-    <div style="background:linear-gradient(135deg,#1A5FA8,#4BAEE8);border-radius:14px;
-      padding:14px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;
-      box-shadow:0 4px 16px rgba(26,95,168,.2)">
-      <div style="flex:1;min-width:0">
-        <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:2px">🔄 Đồng bộ dữ liệu</div>
-        <div style="font-size:12px;color:rgba(255,255,255,.8)" id="viewer-sync-status">
-          Nhấn để tải dữ liệu mới nhất từ Google Drive
-        </div>
+    <div class="sync-banner blue">
+      <div class="sb-text">
+        <div class="sb-title">&#128260; Dữ liệu mới nhất</div>
+        <div class="sb-sub" id="viewer-sync-status">Nhấn để tải dữ liệu từ Google Drive</div>
       </div>
-      <button id="viewer-sync-btn" onclick="viewerSync()"
-        style="padding:10px 20px;border-radius:10px;border:2px solid rgba(255,255,255,.6);
-        background:rgba(255,255,255,.18);color:#fff;font-size:13px;font-weight:800;
-        cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;flex-shrink:0;transition:all .2s"
-        onmouseover="this.style.background='rgba(255,255,255,.32)'"
-        onmouseout="this.style.background='rgba(255,255,255,.18)'">
-        🔄 Đồng bộ ngay
-      </button>
+      <button class="sb-btn" id="viewer-sync-btn" onclick="viewerSync()">&#128260; Đồng bộ ngay</button>
     </div>`;
 }
 function renderNav(){
